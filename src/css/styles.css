@@ -5,7 +5,7 @@ body {
   min-width: 100vw;
   min-height: 100vh;
   margin: 0;
-  background-color:rgb(101, 86, 86);
+  background-color: rgb(101, 86, 86);
 }
 
 ul,
@@ -204,4 +204,37 @@ img {
   color: #1a0d0d;
   margin-top: 0;
   margin-bottom: 8px;
+}
+
+.button-load {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: row;
+  gap: 10px;
+  border-radius: 8px;
+  border: none;
+  padding: 8px 16px;
+  margin-top: 32px;
+  margin-bottom: 44px;
+  width: 125px;
+  height: 40px;
+  background-color: #3f2929;
+  transition: background-color 0.3s ease;
+
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 500;
+  font-size: 16px;
+
+  line-height: 1.5;
+  letter-spacing: 0.04em;
+  color: #fff;
+}
+
+.button-load:hover {
+  background-color: #593d3d;
+}
+
+.button-load.is-hidden {
+  display: none;
 }
