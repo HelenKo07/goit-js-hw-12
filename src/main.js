@@ -17,6 +17,7 @@ let page = 1;
 let query = '';
 
 loaderStyle.style.display = 'none';
+buttonLoadEl.classList.add('is-hidden');
 
 const lightboxModalWindow = new SimpleLightbox('.gallery a', {
   captions: true,
@@ -58,7 +59,6 @@ const searchImg = async event => {
 
     if (data.hits.length === 0) {
       iziToast.show({
-        title: '',
         backgroundColor: '#ef4040',
         borderBottom: '2px solid #ffbebe',
         borderRadius: '4px',
@@ -72,21 +72,18 @@ const searchImg = async event => {
       return;
     }
 
-    if (data.totalHits > 1) {
-      buttonLoadEl.classList.remove('is-hidden');
-
-      buttonLoadEl.addEventListener('click', onButtonLoadClick);
-    }
-
     listGalleryCard.insertAdjacentHTML(
       'beforeend',
       createGalleryCardTemplate(data.hits)
     );
 
+    if (data.totalHits > page * 15) {
+      buttonLoadEl.classList.remove('is-hidden');
+    }
     lightboxModalWindow.refresh();
     
   } catch (error) {
-    console.log(error.message);
+    console.error(error.message);
   } finally {
     loaderStyle.style.display = 'none';
   }
@@ -95,7 +92,7 @@ const searchImg = async event => {
 
 formSearchCard.addEventListener('submit', searchImg);
 
-const onButtonLoadClick = async event => {
+const onButtonLoadClick = async () => {
   try {
     page++;
     const { data } = await fetchPhotosByQuery(query, page);
@@ -103,7 +100,8 @@ const onButtonLoadClick = async event => {
       'beforeend',
       createGalleryCardTemplate(data.hits)
     );
-    if (page * 15 >= data.totalHits) {
+
+    if (page * 15 >= data.totalHits || data.hits.length === 0) {
       iziToast.info({
         title: 'Info',
         position: 'topRight',
@@ -111,8 +109,8 @@ const onButtonLoadClick = async event => {
       });
       
       buttonLoadEl.classList.add('is-hidden');
+      return;
 
-      buttonLoadEl.removeEventListener('click', onButtonLoadClick);
     }
     const smoothScroll = document.querySelector('.gallery-item');
     if(smoothScroll) {
@@ -131,3 +129,4 @@ const onButtonLoadClick = async event => {
   }
 };
 
+      buttonLoadEl.addEventListener('click', onButtonLoadClick);
